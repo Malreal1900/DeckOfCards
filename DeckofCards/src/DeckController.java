@@ -11,6 +11,7 @@ public class DeckController {
 
     private void connectActions() {
 
+        // shuffle the deck
         view.getShuffleButton().setOnAction(e -> {
             deck = new Deck();
             deck.shuffle();
@@ -18,6 +19,7 @@ public class DeckController {
             updateDeckSize();
         });
 
+        // draw a card from the deck - only implemented the top one for now
         view.getDrawButton().setOnAction(e -> {
             Card card = deck.drawCard();
             if (card == null) {
@@ -29,6 +31,7 @@ public class DeckController {
         });
     }
 
+    // tells the user how many cards are left in the deck, resets if you shuffle
     private void updateDeckSize() {
         view.getDeckSize().setText("Deck size: " + deck.size());
     }

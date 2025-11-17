@@ -4,8 +4,11 @@ import javafx.scene.layout.VBox;
 
 public class DeckView {
 
+    // Button events that player creates
     private final Button shuffleButton = new Button("Shuffle Deck");
     private final Button drawButton = new Button("Draw Card");
+
+    // Labels to help the player
     private final Label cardOutput = new Label("Draw a card!");
     private final Label deckSize = new Label("Deck size: 52");
 
@@ -15,6 +18,7 @@ public class DeckView {
         return root;
     }
 
+    // getters for the buttons and labels 
     public Button getShuffleButton() {
         return shuffleButton;
     }

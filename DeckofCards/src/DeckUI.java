@@ -7,10 +7,14 @@ public class DeckUI extends Application {
     @Override
     public void start(Stage stage) {
         DeckView view = new DeckView();
+
         new DeckController(view);
 
+        // Builds the layout, will needs to change the numbers later
         Scene scene = new Scene(view.buildUI(), 300, 200);
+        
         stage.setScene(scene);
+
         stage.setTitle("Deck of Cards");
         stage.show();
     }
