@@ -1,3 +1,5 @@
+import javafx.scene.image.Image;
+
 public class DeckController {
 
     private Deck deck;
@@ -22,13 +24,22 @@ public class DeckController {
         // draw a card from the deck - only implemented the top one for now
         view.getDrawButton().setOnAction(e -> {
             Card card = deck.drawCard();
+
             if (card == null) {
                 view.getCardOutput().setText("No more cards!");
-            } else {
-                view.getCardOutput().setText("You drew: " + card);
+                view.getCardImage().setImage(null);
+                return;
             }
+
+            view.getCardOutput().setText("You drew: " + card);
+
+            // ⭐ Load image from resources/cards/
+            Image img = new Image(getClass().getResourceAsStream(card.getImagePath()));
+            view.getCardImage().setImage(img);
+
             updateDeckSize();
         });
+
     }
 
     // tells the user how many cards are left in the deck, resets if you shuffle

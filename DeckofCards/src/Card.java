@@ -27,4 +27,30 @@ public class Card {
     public String toString() {
         return rank + " of " + suit;
     }
+
+    public String getImagePath() {
+        String rankName;
+
+        switch (rank) {
+            case ACE:
+                rankName = "ace";
+                break;
+            case JACK:
+                rankName = "jack";
+                break;
+            case QUEEN:
+                rankName = "queen";
+                break;
+            case KING:
+                rankName = "king";
+                break;
+            default:
+                // Uses numeric value for 2–10
+                rankName = String.valueOf(rank.getValue());
+        }
+
+        String suitName = suit.name().toLowerCase(); // hearts, diamonds, clubs, spades
+
+        return "/cards/" + rankName + "_of_" + suitName + ".png";
+    }
 }

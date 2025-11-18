@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Deck {
 
-    // This is a list for the dekc of cards, change as much as you want!
+    // This is a list for the deck of cards, change as much as you want!
     private final List<Card> cards = new ArrayList<>();
 
     // constructor
@@ -26,6 +26,10 @@ public class Deck {
             return null;
         }
         return cards.remove(0);
+    }
+
+    public boolean isEmpty() {
+        return cards.isEmpty();
     }
 
     public int size() {

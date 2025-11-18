@@ -1,7 +1,7 @@
 // Sets the possible options for a Card's rank
 // These values will need to be changed based on the game being played
 public enum Rank {
-    ACE(14),    // Ace is the wildcard depending on the game its value can fluxuate heavily
+    ACE(1),    // Ace is the wildcard depending on the game its value can fluxuate heavily
     TWO(2),
     THREE(3),
     FOUR(4),

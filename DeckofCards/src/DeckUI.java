@@ -11,7 +11,7 @@ public class DeckUI extends Application {
         new DeckController(view);
 
         // Builds the layout, will needs to change the numbers later
-        Scene scene = new Scene(view.buildUI(), 300, 200);
+        Scene scene = new Scene(view.buildUI(), 600, 400);
         
         stage.setScene(scene);
 
