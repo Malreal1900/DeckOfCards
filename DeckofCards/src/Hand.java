@@ -4,9 +4,11 @@ import java.util.List;
 // Need to look over Hand UML
 public class Hand {
     private final List<Card> cards;
+    private Card lastPlayedCard; // Track the last card played
     
     public Hand() {
         this.cards = new ArrayList<>();
+        this.lastPlayedCard = null;
     }
     
     public void addCard(Card card) {
@@ -17,9 +19,11 @@ public class Hand {
     
     public Card playCard() {
         if (cards.isEmpty()) {
+            lastPlayedCard = null;
             return null;
         }
-        return cards.remove(0);
+        lastPlayedCard = cards.remove(0); // Store the card we're about to return
+        return lastPlayedCard;
     }
     
     public Card peekCard() {
@@ -27,6 +31,16 @@ public class Hand {
             return null;
         }
         return cards.get(0);
+    }
+
+    // NEW METHOD: Get the last card that was played
+    public Card getLastPlayedCard() {
+        return lastPlayedCard;
+    }
+    
+    // NEW METHOD: Clear the last played card (useful for game reset)
+    public void clearLastPlayedCard() {
+        lastPlayedCard = null;
     }
     
     public boolean isEmpty() {

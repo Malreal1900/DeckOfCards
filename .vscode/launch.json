@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "WarGameUI",
+            "request": "launch",
+            "mainClass": "WarGameUI",
+            "projectName": "DeckOfCards_dace1ef1"
+        },
+        {
+            "type": "java",
             "name": "WarGameTest",
             "request": "launch",
             "mainClass": "WarGameTest",

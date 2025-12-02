@@ -36,6 +36,33 @@ public class Card {
             case ACE:
                 rankName = "ace";
                 break;
+            case TWO:
+                rankName = "2";
+                break;
+            case THREE:
+                rankName = "3";
+                break;
+            case FOUR:
+                rankName = "4";
+                break;
+            case FIVE:
+                rankName = "5";
+                break;
+            case SIX:
+                rankName = "6";
+                break;
+            case SEVEN:
+                rankName = "7";
+                break;
+            case EIGHT:
+                rankName = "8";
+                break;
+            case NINE:
+                rankName = "9";
+                break;
+            case TEN:
+                rankName = "10";
+                break;
             case JACK:
                 rankName = "jack";
                 break;
@@ -46,12 +73,11 @@ public class Card {
                 rankName = "king";
                 break;
             default:
-                // Uses numeric value for 2–10
                 rankName = String.valueOf(rank.getValue());
         }
-
-        String suitName = suit.name().toLowerCase(); // hearts, diamonds, clubs, spades
-
+        
+        String suitName = suit.name().toLowerCase(); // clubs, diamonds, hearts, spades
+        
         return "/cards/" + rankName + "_of_" + suitName + ".png";
     }
 }

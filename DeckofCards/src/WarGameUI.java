@@ -14,7 +14,6 @@ import javafx.stage.Stage;
 
 public class WarGameUI extends Application {
 
-    // ====UI Section===
     private WarGame warGame;
     private TextArea gameLog;
     private Label player1CountLabel;
@@ -23,9 +22,15 @@ public class WarGameUI extends Application {
     private ImageView player1CardImage;
     private ImageView player2CardImage;
     
+    // Store the last played cards for display
+    private Card lastPlayer1Card;
+    private Card lastPlayer2Card;
+    
     @Override
     public void start(Stage stage) {
         warGame = new WarGame();
+        lastPlayer1Card = null;
+        lastPlayer2Card = null;
         
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(15));
@@ -43,8 +48,9 @@ public class WarGameUI extends Application {
         VBox player1Box = new VBox(10);
         player1Box.setAlignment(Pos.CENTER);
         player1CardImage = new ImageView();
-        player1CardImage.setFitWidth(100);
+        player1CardImage.setFitWidth(120); // Slightly larger for better visibility
         player1CardImage.setPreserveRatio(true);
+        player1CardImage.setImage(getCardBackImage()); // Show card back initially
         Label player1Label = new Label("Player 1");
         player1CountLabel = new Label("Cards: " + warGame.getPlayer1CardCount());
         player1Box.getChildren().addAll(player1Label, player1CardImage, player1CountLabel);
@@ -52,8 +58,9 @@ public class WarGameUI extends Application {
         VBox player2Box = new VBox(10);
         player2Box.setAlignment(Pos.CENTER);
         player2CardImage = new ImageView();
-        player2CardImage.setFitWidth(100);
+        player2CardImage.setFitWidth(120);
         player2CardImage.setPreserveRatio(true);
+        player2CardImage.setImage(getCardBackImage()); // Show card back initially
         Label player2Label = new Label("Player 2");
         player2CountLabel = new Label("Cards: " + warGame.getPlayer2CardCount());
         player2Box.getChildren().addAll(player2Label, player2CardImage, player2CountLabel);
@@ -86,18 +93,21 @@ public class WarGameUI extends Application {
         bottomBox.getChildren().addAll(statusLabel, buttonBox, new Label("Game Log:"), gameLog);
         root.setBottom(bottomBox);
         
-        Scene scene = new Scene(root, 600, 600);
+        Scene scene = new Scene(root, 650, 650);
         stage.setScene(scene);
         stage.setTitle("War Card Game");
         stage.show();
     }
     
-    // code logic starts here!!!
     private void playRound() {
         if (warGame.isGameOver()) {
             statusLabel.setText("Game Over! Winner: " + warGame.getWinner());
             return;
         }
+        
+        // Store the previous round's cards before playing new round
+        lastPlayer1Card = warGame.getLastPlayer1Card();
+        lastPlayer2Card = warGame.getLastPlayer2Card();
         
         String result = warGame.playRound();
         gameLog.appendText(result + "\n\n");
@@ -106,7 +116,7 @@ public class WarGameUI extends Application {
         player1CountLabel.setText("Cards: " + warGame.getPlayer1CardCount());
         player2CountLabel.setText("Cards: " + warGame.getPlayer2CardCount());
         
-        // Update card images if possible
+        // Update card images with the cards that were just played
         updateCardImages();
         
         if (warGame.isGameOver()) {
@@ -119,20 +129,60 @@ public class WarGameUI extends Application {
     }
     
     private void updateCardImages() {
-        // Show top cards if available
-        Hand player1Hand = warGame.getPlayer1Hand();
-        Hand player2Hand = warGame.getPlayer2Hand();
+        // Get the cards that were just played from the WarGame
+        Card currentPlayer1Card = warGame.getLastPlayer1Card();
+        Card currentPlayer2Card = warGame.getLastPlayer2Card();
         
-        if (!player1Hand.isEmpty()) {
-            Card card = player1Hand.peekCard();
-            Image img = new Image(getClass().getResourceAsStream(card.getImagePath()));
-            player1CardImage.setImage(img);
+        // If no cards were played yet, show card backs or previous cards
+        if (currentPlayer1Card != null) {
+            try {
+                Image img = new Image(getClass().getResourceAsStream(currentPlayer1Card.getImagePath()));
+                player1CardImage.setImage(img);
+            } catch (Exception e) {
+                System.err.println("Error loading image for Player 1 card: " + currentPlayer1Card);
+                player1CardImage.setImage(getCardBackImage());
+            }
+        } else if (lastPlayer1Card != null) {
+            // Show previous card if current is null
+            try {
+                Image img = new Image(getClass().getResourceAsStream(lastPlayer1Card.getImagePath()));
+                player1CardImage.setImage(img);
+            } catch (Exception e) {
+                player1CardImage.setImage(getCardBackImage());
+            }
+        } else {
+            player1CardImage.setImage(getCardBackImage());
         }
         
-        if (!player2Hand.isEmpty()) {
-            Card card = player2Hand.peekCard();
-            Image img = new Image(getClass().getResourceAsStream(card.getImagePath()));
-            player2CardImage.setImage(img);
+        if (currentPlayer2Card != null) {
+            try {
+                Image img = new Image(getClass().getResourceAsStream(currentPlayer2Card.getImagePath()));
+                player2CardImage.setImage(img);
+            } catch (Exception e) {
+                System.err.println("Error loading image for Player 2 card: " + currentPlayer2Card);
+                player2CardImage.setImage(getCardBackImage());
+            }
+        } else if (lastPlayer2Card != null) {
+            // Show previous card if current is null
+            try {
+                Image img = new Image(getClass().getResourceAsStream(lastPlayer2Card.getImagePath()));
+                player2CardImage.setImage(img);
+            } catch (Exception e) {
+                player2CardImage.setImage(getCardBackImage());
+            }
+        } else {
+            player2CardImage.setImage(getCardBackImage());
+        }
+    }
+    
+    private Image getCardBackImage() {
+        // You should have a card back image in your cards folder
+        // For example: "/cards/card_back.png"
+        try {
+            return new Image(getClass().getResourceAsStream("/cards/card_back.png"));
+        } catch (Exception e) {
+            // If no card back image exists, return null
+            return null;
         }
     }
     
@@ -142,8 +192,10 @@ public class WarGameUI extends Application {
         player1CountLabel.setText("Cards: " + warGame.getPlayer1CardCount());
         player2CountLabel.setText("Cards: " + warGame.getPlayer2CardCount());
         statusLabel.setText("Game restarted! Click 'Play Round' to start!");
-        player1CardImage.setImage(null);
-        player2CardImage.setImage(null);
+        player1CardImage.setImage(getCardBackImage());
+        player2CardImage.setImage(getCardBackImage());
+        lastPlayer1Card = null;
+        lastPlayer2Card = null;
     }
     
     public static void main(String[] args) {

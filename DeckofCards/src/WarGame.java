@@ -1,5 +1,3 @@
-// Need to fix the logic of this code.
-
 import java.util.List;
 import java.util.ArrayList;
 
@@ -10,8 +8,12 @@ public class WarGame {
     private List<Card> warPile;
     private boolean gameOver;
     private String winner;
+    private Card lastPlayer1Card;
+    private Card lastPlayer2Card;
     
     public WarGame() {
+        lastPlayer1Card = null;
+        lastPlayer2Card = null;
         initializeGame();
     }
     
@@ -23,6 +25,8 @@ public class WarGame {
         warPile = new ArrayList<>();
         gameOver = false;
         winner = null;
+        lastPlayer1Card = null;
+        lastPlayer2Card = null;
         
         // Deal cards to both players
         while (!deck.isEmpty()) {
@@ -43,17 +47,22 @@ public class WarGame {
             return "Game over! Winner: " + winner;
         }
         
-        Card player1Card = player1Hand.playCard();
-        Card player2Card = player2Hand.playCard();
+        // Clear war pile at start of normal round
+        warPile.clear();
         
-        warPile.add(player1Card);
-        warPile.add(player2Card);
+        // Play cards and store them as last played
+        lastPlayer1Card = player1Hand.playCard();
+        lastPlayer2Card = player2Hand.playCard();
+        
+        // Add cards to war pile
+        warPile.add(lastPlayer1Card);
+        warPile.add(lastPlayer2Card);
         
         StringBuilder result = new StringBuilder();
-        result.append("Player 1 plays: ").append(player1Card).append("\n");
-        result.append("Player 2 plays: ").append(player2Card).append("\n");
+        result.append("Player 1 plays: ").append(lastPlayer1Card).append("\n");
+        result.append("Player 2 plays: ").append(lastPlayer2Card).append("\n");
         
-        int comparison = compareCards(player1Card, player2Card);
+        int comparison = compareCards(lastPlayer1Card, lastPlayer2Card);
         
         if (comparison > 0) {
             // Player 1 wins the round
@@ -62,7 +71,6 @@ public class WarGame {
             for (Card card : warPile) {
                 player1Hand.addCard(card);
             }
-            warPile.clear();
         } else if (comparison < 0) {
             // Player 2 wins the round
             result.append("Player 2 wins the round!\n");
@@ -70,12 +78,15 @@ public class WarGame {
             for (Card card : warPile) {
                 player2Hand.addCard(card);
             }
-            warPile.clear();
         } else {
             // WAR!
             result.append("WAR!\n");
+            // Don't clear war pile yet - we'll add more cards during war
             return handleWar(result.toString());
         }
+        
+        // Clear war pile after normal round win
+        warPile.clear();
         
         checkGameStatus();
         
@@ -106,26 +117,34 @@ public class WarGame {
         boolean canDoFullWar = player1Hand.size() >= 4 && player2Hand.size() >= 4;
         
         if (canDoFullWar) {
-            // Add 3 face-down cards from each player
+            // Add 3 face-down cards from each player to war pile
             for (int i = 0; i < 3; i++) {
                 warPile.add(player1Hand.playCard());
                 warPile.add(player2Hand.playCard());
             }
         } else {
-            // Not enough cards for full war, use all remaining cards
-            result.append("Not enough cards for full war! Using remaining cards.\n");
+            // Not enough cards for full war
+            result.append("Not enough cards for full war! ");
+            // Add whatever cards are left
+            int cardsToAdd = Math.min(player1Hand.size() - 1, player2Hand.size() - 1);
+            cardsToAdd = Math.min(cardsToAdd, 3); // Max 3 face-down cards
+            
+            for (int i = 0; i < cardsToAdd; i++) {
+                warPile.add(player1Hand.playCard());
+                warPile.add(player2Hand.playCard());
+            }
         }
         
         // Play the face-up war cards
-        Card player1WarCard = player1Hand.playCard();
-        Card player2WarCard = player2Hand.playCard();
+        lastPlayer1Card = player1Hand.playCard();
+        lastPlayer2Card = player2Hand.playCard();
         
-        warPile.add(player1WarCard);
-        warPile.add(player2WarCard);
+        warPile.add(lastPlayer1Card);
+        warPile.add(lastPlayer2Card);
         
-        result.append("War cards: ").append(player1WarCard).append(" vs ").append(player2WarCard).append("\n");
+        result.append("War cards: ").append(lastPlayer1Card).append(" vs ").append(lastPlayer2Card).append("\n");
         
-        int warComparison = compareCards(player1WarCard, player2WarCard);
+        int warComparison = compareCards(lastPlayer1Card, lastPlayer2Card);
         
         if (warComparison > 0) {
             result.append("Player 1 wins the war!\n");
@@ -153,8 +172,6 @@ public class WarGame {
     }
     
     private int compareCards(Card card1, Card card2) {
-        // In War, we only compare rank, not suit
-        // Note: Assuming Card.getValue() returns rank value (2=2, 3=3, ..., J=11, Q=12, K=13, A=14)
         return Integer.compare(card1.getValue(), card2.getValue());
     }
     
@@ -196,6 +213,14 @@ public class WarGame {
     
     public int getPlayer2CardCount() {
         return player2Hand.size();
+    }
+    
+    public Card getLastPlayer1Card() {
+        return lastPlayer1Card;
+    }
+    
+    public Card getLastPlayer2Card() {
+        return lastPlayer2Card;
     }
     
     public Hand getPlayer1Hand() {
