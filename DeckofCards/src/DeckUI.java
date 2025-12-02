@@ -2,6 +2,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+// this application is overlooked for now, will try to integrate the game and deck but also make them separate. 
 public class DeckUI extends Application {
 
     @Override

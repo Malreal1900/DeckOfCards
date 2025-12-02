@@ -33,7 +33,7 @@ public class DeckController {
 
             view.getCardOutput().setText("You drew: " + card);
 
-            // ⭐ Load image from resources/cards/
+            // images from src/cards/
             Image img = new Image(getClass().getResourceAsStream(card.getImagePath()));
             view.getCardImage().setImage(img);
 

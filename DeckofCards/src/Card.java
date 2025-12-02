@@ -1,5 +1,6 @@
 // Reps a single playing card w/ a suit, rank, and value.
 // Will be used by the Deck and Hand in the game.
+
 public class Card {
     
     private final Suit suit;
