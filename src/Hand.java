@@ -17,6 +17,14 @@ public class Hand {
         }
     }
 
+    public Card drawTopCard() {
+        return !cards.isEmpty() ? cards.remove(0) : null;
+    }
+
+    public void addCards(List<Card> newCards) {
+        cards.addAll(newCards);
+    }
+
     // Remove a card (if needed)
     public void removeCard(Card card) {
         cards.remove(card);

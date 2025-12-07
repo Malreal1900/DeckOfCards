@@ -15,9 +15,9 @@ public class SplitDeckDialog {
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
         player1Field = new TextField();
-        player1Field.setPromptText("Enter cards for Player 1 (0–52)");
+        player1Field.setPromptText("Enter cards for Player 1 (1–51)");
 
-        VBox box = new VBox(10, new Label("How many cards should Player 1 get?"), player1Field);
+        VBox box = new VBox(10, new Label("How many cards should Player 1 get? (1–51)"), player1Field);
         box.setPadding(new Insets(15));
 
         dialog.getDialogPane().setContent(box);
@@ -26,9 +26,12 @@ public class SplitDeckDialog {
             if (btn == ButtonType.OK) {
                 try {
                     int p1 = Integer.parseInt(player1Field.getText());
-                    if (p1 >= 0 && p1 <= 52) {
+
+                    // Prevents 0-card or 52-card splits
+                    if (p1 > 0 && p1 < 52) {
                         return new int[]{ p1, 52 - p1 };
                     }
+
                 } catch (Exception ignore) { }
             }
             return null;
