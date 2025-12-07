@@ -1,20 +1,52 @@
-## Getting Started
+### Cameron "CJ" Robinson, Brisa Rocha, Malia Curry
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+### CSCI 3331-001, Juliette Garcia 
 
-## Folder Structure
 
-The workspace contains two folders by default, where:
+# Checkpoint 3
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+*This is a program that allows the user to play a game of war against the CPU*
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+*War is 2 player card game, where the deck is split, and
+the players flip the top card of the split deck given to
+them.
+ In case of a tie, a WAR occurs, with each player placing 3
+cards face down, then one face up to determine the
+winner of the round
+The game continues until one player has ALL the cards*
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+**App.java:**
+Base file with no applicable code.
 
-## Dependency Management
+**Card.java:**
+Holds ranks and suits of cards.
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+**Deck.java**
+Has a deck list/constructor, methods for shuffling, drawing, finding the size of the deck, and a boolean to see if the deck is empty.
 
-Test
+**DeckController.java:**
+Connects the actions of altering the deck code-wise to the physical buttons.
+
+**DeckUI.java**
+Constructs the UI for running the program.
+
+**DeckView.java**
+Methods to interact with and modify the deck.
+
+**Hand.java**
+Methods that allow the user to modify their hand.
+
+**Rank.java**
+Sets the possible options for a Card's rank.
+
+**SplitDeckDialog.java**
+Sets the dialog prompted to the user for certian actions.
+
+**Suit.java**
+Enum for the suits.
+
+**WarController.java**'
+Controls the game and keeps everything tidy between players.
+
+**WarGame.java**
+The game operations for the war game
